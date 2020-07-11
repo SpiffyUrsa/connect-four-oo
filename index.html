@@ -9,9 +9,13 @@
   <table id="board"></table>
 </div>
 
-<div>
-  <button id="btn" onclick="startGame()">Start Game</button>
-</div>
+<form id="playForm">
+  <label for="player1Color">Player 1 Color:</label>
+    <input type="text" id="player1Color">
+  <label for="player2Color">Player 2 Color:</label>
+    <input type="text" id="player2Color">
+    <button id="btn" type="submit">Start Game</button>
+</form>
 
 <script src="connect4.js"></script>
 

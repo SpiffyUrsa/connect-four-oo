@@ -4,18 +4,17 @@
  * column until a player gets four-in-a-row (horiz, vert, or diag) or until
  * board fills (tie)
  */
-
+// Creates the Game class which sets up the board, handles the progress of the game.
 class Game {
-  constructor(width = 7, height = 6) {
+  constructor(player1, player2, width = 7, height = 6) {
     this.width = width;
     this.height = height;
     this.board = [];
-    this.currPlayer = 1;
+    this.players = [player1, player2];
+    this.currPlayer = player1;
     this.makeBoard();
     this.makeHtmlBoard();
   }
-
-
   // method that makes the board inside of the instance of Game. 
   makeBoard() {
     this.board = [];
@@ -37,9 +36,7 @@ class Game {
       headCell.setAttribute('id', x);
       top.append(headCell);
     }
-  
     board.append(top);
-  
     // make main part of board
     for (let y = 0; y < this.height; y++) {
       const row = document.createElement('tr');
@@ -66,17 +63,16 @@ class Game {
   placeInTable(y, x) {
     const piece = document.createElement('div');
     piece.classList.add('piece');
-    piece.classList.add(`p${this.currPlayer}`);
+    piece.style.backgroundColor = `${this.currPlayer.color}`;
     piece.style.top = -50 * (y + 2);
-  
     const spot = document.getElementById(`${y}-${x}`);
     spot.append(piece);
   }
   // announce the end of the game  
   endGame(msg) {
-    alert(msg);
+    setTimeout(function() { alert(msg) }, 1000);
   }
-  // handles click
+  // handles a click to drop a piece down.
   handleClick(evt) {
     // get x from ID of clicked cell
     const x = +evt.target.id;
@@ -93,7 +89,7 @@ class Game {
     
     // check for win
     if (this.checkForWin()) {
-      return this.endGame(`Player ${this.currPlayer} won!`);
+      return this.endGame(`Player ${this.currPlayer.color.toUpperCase()} won!`);
     }
     
     // check for tie
@@ -102,9 +98,11 @@ class Game {
     }
       
     // switch players
-    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer === this.players[0] 
+        ? this.players[1] 
+        : this.players[0];
   }
-
+// checks to see if there is a winner.
   checkForWin() {
     
     let win = (cells) => {
@@ -138,6 +136,21 @@ class Game {
   }
 }
 
-function startGame(){
-  new Game();
+// Creates the player class with a color value.
+class Player {
+  constructor(color) {
+    this.color = color;
+  }
 }
+
+// Assigns players their color and starts a new game.
+function startGame(event){
+  event.preventDefault();
+  let player1 = new Player();
+  let player2 = new Player();
+  player1.color = document.getElementById("player1Color").value;
+  player2.color = document.getElementById("player2Color").value;
+  new Game(player1, player2);
+}
+
+document.getElementById("playForm").addEventListener("submit", startGame);
