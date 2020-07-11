@@ -14,8 +14,11 @@ class Game {
     this.makeBoard();
     this.makeHtmlBoard();
   }
+
+
   // method that makes the board inside of the instance of Game. 
   makeBoard() {
+    this.board = [];
     for (let y = 0; y < this.height; y++) {
       this.board.push(Array.from({ length: this.width }));
     }
@@ -23,6 +26,7 @@ class Game {
   // method that makes the HTML board.
   makeHtmlBoard() {
     const board = document.getElementById('board');
+    board.innerHTML = '';
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
@@ -134,4 +138,6 @@ class Game {
   }
 }
 
-new Game();
+function startGame(){
+  new Game();
+}
